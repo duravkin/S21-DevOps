@@ -1,0 +1,4 @@
+Hello World
+This is a test file.
+Grep is powerful.
+Pattern matching is fun!

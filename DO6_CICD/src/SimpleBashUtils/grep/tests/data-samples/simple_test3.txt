@@ -1,0 +1,5 @@
+Case sensitivity matters.
+hello world
+HELLO WORLD
+Special characters: @#$%^&*()
+Testing with numbers: 123456

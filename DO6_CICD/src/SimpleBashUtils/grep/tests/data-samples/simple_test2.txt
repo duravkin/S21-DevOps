@@ -1,0 +1,5 @@
+Another test file.
+This file contains some text.
+Let's test grep commands.
+Grep can search for patterns.
+This is the second test file.

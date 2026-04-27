@@ -1,0 +1,3 @@
+Empty lines should be handled.
+
+This line is after an empty line.

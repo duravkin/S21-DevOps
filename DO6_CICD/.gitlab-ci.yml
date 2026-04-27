@@ -1,0 +1,51 @@
+stages:
+  - build
+  - style
+  - test
+  - deploy
+
+build_project:
+  stage: build
+  script:
+    - cd src/SimpleBashUtils/cat && make
+    - cd ../../../
+    - cd src/SimpleBashUtils/grep && make
+  artifacts:
+    paths:
+      - src/SimpleBashUtils/cat
+      - src/SimpleBashUtils/grep
+    expire_in: 30 days
+  after_script:
+    - bash src/TelegramBot.sh
+
+codestyle:
+  stage: style
+  script:
+    - clang-format -n --Werror -style=Google $(find src/SimpleBashUtils/ -type f -name *.c -o -name *.h)
+  after_script:
+    - bash src/TelegramBot.sh
+
+integration_tests:
+  stage: test
+  dependencies:
+    - build_project
+    - codestyle
+  script:
+    - cd src/SimpleBashUtils/cat/tests && bash s21_tester_cat.sh
+    - cd ../../../../
+    - cd src/SimpleBashUtils/grep/tests && bash s21_tester_grep.sh
+  allow_failure: false
+  after_script:
+    - bash src/TelegramBot.sh
+
+deploy:
+  stage: deploy
+  when: manual
+  dependencies:
+    - build_project
+    - codestyle
+    - integration_tests
+  script:
+    - bash src/deploy.sh
+  after_script:
+    - bash src/TelegramBot.sh
